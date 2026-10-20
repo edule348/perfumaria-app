@@ -162,7 +162,7 @@ def novo_pedido():
             else:
                 m = dt.month + i
                 y = dt.year
-            vencimento = f"{y:04d}-{m:02d}-05" # 5º dia útil (configurado para o dia 5)
+            vencimento = f"{y:04d}-{m:02d}-05"
             cursor.execute('INSERT INTO parcelas (pedido_id, numero_parcela, vencimento, valor_parcela, status) VALUES (?, ?, ?, ?, ?)',
                            (pedido_id, i, vencimento, valor_parcela, 'Pendente'))
                            
@@ -198,4 +198,5 @@ def orcamento(pedido_id):
     return render_template('orcamento.html', pedido=pedido, itens=itens, parcelas=parcelas, pix_chave=pix_chave)
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=True)
