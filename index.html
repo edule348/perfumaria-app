@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold text-slate-800">Lista de Pedidos</h1>
+    <a href="/pedido/novo" class="bg-purple-600 text-white px-4 py-2 rounded-lg shadow hover:bg-purple-700">Novo Pedido</a>
+</div>
+<div class="bg-white shadow rounded-lg overflow-hidden">
+    <table class="min-w-full divide-y divide-slate-200">
+        <thead class="bg-slate-100 text-slate-700">
+            <tr>
+                <th class="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">ID</th>
+                <th class="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">Cliente</th>
+                <th class="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">Data</th>
+                <th class="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">Parcelas</th>
+                <th class="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">Valor Total</th>
+                <th class="px-6 py-3 text-center text-xs font-bold uppercase tracking-wider">Ações</th>
+            </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-slate-200">
+            {% for p in pedidos %}
+            <tr>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900">#{{ p.id }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700">
+                    <a href="/cliente/{{ p.cliente_id }}" class="text-purple-600 hover:underline font-semibold">{{ p.cliente_nome }}</a>
+                    <div class="text-xs text-slate-500">{{ p.cliente_tel }}</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700">{{ p.data_pedido }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700">{{ p.qtd_parcelas }}x</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-green-600">R$ {{ "%.2f"|format(p.valor_total) }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium space-x-2">
+                    <a href="/pedido/{{ p.id }}/orcamento" class="bg-blue-50 text-blue-600 px-3 py-1.5 rounded hover:bg-blue-100 font-semibold"><i class="fa-solid fa-file-invoice"></i> Orçamento / Pix</a>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6" class="px-6 py-4 text-center text-slate-500">Nenhum pedido cadastrado ainda.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
