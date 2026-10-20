@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="mb-6 bg-white p-6 rounded-lg shadow flex justify-between items-center">
+    <div>
+        <h1 class="text-2xl font-bold text-slate-800">{{ cliente.nome }}</h1>
+        <p class="text-slate-600"><i class="fa-solid fa-phone"></i> {{ cliente.telefone }} | <i class="fa-solid fa-cake-candles"></i> Aniversário: {{ cliente.aniversario or 'Não informado' }}</p>
+    </div>
+    <a href="/clientes" class="bg-slate-200 text-slate-700 px-4 py-2 rounded-lg hover:bg-slate-300">Voltar para Clientes</a>
+</div>
+<h2 class="text-xl font-bold mb-4 text-slate-800">Histórico de Compras e Pagamentos</h2>
+<div class="space-y-6">
+    {% for h in historico %}
+    <div class="bg-white p-6 rounded-lg shadow border border-slate-200">
+        <div class="flex justify-between items-center mb-4 border-b pb-2">
+            <div>
+                <span class="font-bold text-purple-700 text-lg">Pedido #{{ h.pedido.id }}</span>
+                <span class="text-slate-500 ml-4">Data: {{ h.pedido.data_pedido }}</span>
+            </div>
+            <div>
+                <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-semibold">{{ h.pedido.qtd_parcelas }}x Parcelas</span>
+                <span class="font-bold text-green-600 ml-4 text-lg">Total: R$ {{ "%.2f"|format(h.pedido.valor_total) }}</span>
+            </div>
+        </div>
+        <h3 class="font-semibold text-slate-700 mb-2">Produtos do Pedido:</h3>
+        <ul class="mb-4 divide-y divide-slate-100">
+            {% for item in h.itens %}
+            <li class="py-2 flex justify-between items-center text-sm">
+                <span><strong>[{{ item.codigo }}]</strong> {{ item.descricao }} (Qtd: {{ item.quantidade }})</span>
+                <span class="font-medium text-slate-700">R$ {{ "%.2f"|format(item.valor_total) }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+        <h3 class="font-semibold text-slate-700 mb-2">Parcelas e Histórico de Pagamento:</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            {% for parc in h.parcelas %}
+            <div class="bg-slate-50 p-3 rounded border border-slate-200 flex justify-between items-center">
+                <div>
+                    <div class="text-xs font-bold text-slate-600">Parcela {{ parc.numero_parcela }}/{{ h.pedido.qtd_parcelas }}</div>
+                    <div class="text-sm font-semibold text-slate-800">R$ {{ "%.2f"|format(parc.valor_parcela) }}</div>
+                    <div class="text-xs text-slate-500">Venc: {{ parc.vencimento }}</div>
+                </div>
+                <div>
+                    <span class="px-2 py-1 text-xs rounded font-bold {% if parc.status == 'Pago' %}bg-green-100 text-green-700{% else %}bg-amber-100 text-amber-700{% endif %}">{{ parc.status }}</span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="mt-4 text-right">
+            <a href="/pedido/{{ h.pedido.id }}/orcamento" class="text-purple-600 hover:underline font-semibold text-sm"><i class="fa-solid fa-qrcode"></i> Ver Orçamento / QR Code Pix</a>
+        </div>
+    </div>
+    {% else %}
+    <div class="bg-white p-6 rounded-lg shadow text-center text-slate-500">
+        Nenhum pedido registrado para este cliente.
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
