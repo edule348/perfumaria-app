@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="bg-white p-6 rounded-lg shadow">
+        <h2 class="text-xl font-bold mb-4 text-slate-800">Cadastrar Cliente</h2>
+        <form method="POST" class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-slate-700">Nome do Cliente</label>
+                <input type="text" name="nome" required class="mt-1 block w-full rounded-md border-slate-300 shadow-sm border p-2">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-slate-700">Telefone</label>
+                <input type="text" name="telefone" required class="mt-1 block w-full rounded-md border-slate-300 shadow-sm border p-2">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-slate-700">Aniversário (opcional)</label>
+                <input type="date" name="aniversario" class="mt-1 block w-full rounded-md border-slate-300 shadow-sm border p-2">
+            </div>
+            <button type="submit" class="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 font-semibold">Salvar Cliente</button>
+        </form>
+    </div>
+    <div class="md:col-span-2 bg-white p-6 rounded-lg shadow">
+        <h2 class="text-xl font-bold mb-4 text-slate-800">Clientes Cadastrados</h2>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-slate-200">
+                <thead class="bg-slate-100">
+                    <tr>
+                        <th class="px-4 py-2 text-left text-xs font-bold text-slate-700 uppercase">Nome</th>
+                        <th class="px-4 py-2 text-left text-xs font-bold text-slate-700 uppercase">Telefone</th>
+                        <th class="px-4 py-2 text-left text-xs font-bold text-slate-700 uppercase">Aniversário</th>
+                        <th class="px-4 py-2 text-center text-xs font-bold text-slate-700 uppercase">Ações</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                    {% for c in clientes %}
+                    <tr>
+                        <td class="px-4 py-2 text-sm font-semibold text-purple-700">{{ c.nome }}</td>
+                        <td class="px-4 py-2 text-sm text-slate-600">{{ c.telefone }}</td>
+                        <td class="px-4 py-2 text-sm text-slate-600">{{ c.aniversario or '-' }}</td>
+                        <td class="px-4 py-2 text-center">
+                            <a href="/cliente/{{ c.id }}" class="bg-purple-100 text-purple-700 px-3 py-1 rounded text-sm hover:bg-purple-200 font-medium">Ver Histórico</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
